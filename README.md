@@ -175,9 +175,61 @@ There are two options for Kubernetes deployment in this app:
 
 - OPTION B. Deployment using HELM and CHART deployment files.
 
-## (Prerequisite) Kubernetes cluster installation
+## Prerequisites
+
+### Kubernetes cluster installation
 
 Make sure you have enabled Kubernetes in Docker for Desktop or install Kubernetes into any Linux box/VM. 
+
+### Install Kubernetes-Dashboard into K8s
+
+This is optionally, but it is very useful to see deployments in the graphical dashboard of Kubernetes.
+
+1. (Just once) Run the following command to deploy the Kubernetes Dashboard:
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+```
+
+
+2. (Just once) Create a service account for the dashboard:
+
+```bash
+kubectl create serviceaccount dashboard-admin-sa -n kubernetes-dashboard
+```
+
+
+3. (Just once) Bind the service account to the cluster-admin role
+
+```bash
+kubectl create clusterrolebinding dashboard-admin-sa --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:dashboard-admin-sa
+```
+
+
+4. Obtain the Bearer Token:
+
+You need to get the token for the service account to login into the dashboard: 
+
+```bash
+kubectl -n kubernetes-dashboard create token dashboard-admin-sa
+```
+
+5. Access the Kubernetes Dashboard:
+
+You need to start the kubectl proxy in order to reach the dashboard within the cluster:
+
+```bash
+kubectl proxy
+```
+
+
+6. Open your web browser and go to:
+
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+Provide the token for login, etc.
+
+
 
 ## OPTION A. Deploy to Kubernetes using KUBECTL
 
