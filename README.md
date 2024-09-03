@@ -9,19 +9,19 @@ A simple example of Ruby on Rails app with several services, deployed into Docke
 # Deployment to Docker host
 Check the commands at the file:
 
-**commands for docker compose.txt**
+[**commands for docker compose.txt**](/commands%20for%20docker%20compose.txt)
 
 # Deployment to Kubernetes
 
 There are two options for Kubernetes deployment in this app:
 - A. Deployment using KUBECTL and .YAML deployment files.
 
-    **/k8s/helm/Commands to deploy with KUBECTL.txt**
+    [**/k8s/helm/Commands to deploy with KUBECTL.txt**](/k8s/kubectl/Commands%20to%20deploy%20with%20KUBECTL.txt)
 
 
 - B. Deployment using HELM and CHART deployment files.
 
-    **/k8s/helm/Commands to deploy with HELM.txt**
+    [**/k8s/helm/Commands to deploy with HELM.txt**](/k8s/helm/Commands%20to%20deploy%20with%20HELM.txt)
 
 
 
