@@ -183,23 +183,23 @@ Make sure you have enabled Kubernetes in Docker for Desktop or install Kubernete
 
 ### Install Kubernetes-Dashboard into K8s
 
-This is optionally, but it is very useful to see deployments in the graphical dashboard of Kubernetes.
+This step is optional, but it is very useful to see the app deployments in the graphical dashboard of Kubernetes.
 
-1. (Just once) Run the following command to deploy the Kubernetes Dashboard:
+1. (Run just once) Run the following command to deploy the Kubernetes Dashboard:
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
 ```
 
 
-2. (Just once) Create a service account for the dashboard:
+2. (Run just once) Create a service account for the dashboard:
 
 ```bash
 kubectl create serviceaccount dashboard-admin-sa -n kubernetes-dashboard
 ```
 
 
-3. (Just once) Bind the service account to the cluster-admin role
+3. (Run just once) Bind the service account to the cluster-admin role
 
 ```bash
 kubectl create clusterrolebinding dashboard-admin-sa --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:dashboard-admin-sa
