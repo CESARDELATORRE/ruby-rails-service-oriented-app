@@ -4,7 +4,7 @@ A simple example of Ruby on Rails app with several services, deployed into Docke
 
 # Get started
 
-**1. Copy/rename the example-rename-to.env to .env:** Since the .env files won't be uploaded to the GitHub repo for security reasons, you need to rename the Copy/rename that file for your own .env file.
+**Copy/rename the example-rename-to.env to .env:** Since the .env files won't be uploaded to the GitHub repo for security reasons, you need to rename the Copy/rename that file for your own .env file.
 
 # Deployment to Docker host
 Check the commands at the file:
