@@ -1,0 +1,26 @@
+# namespace: ruby-rails-apis-poc
+app: articlesrailsapi-app
+
+deployment:
+  name: articlesrailsapi-deployment
+  replicas: 1
+
+container:
+  name: articlesrailsapi-container
+  image: rubyonrailspocs/articlesrailsapi
+  imagePullPolicy: Always
+  port: 3000
+
+service:
+  name: articlesrailsapi
+  type: NodePort
+  port: 3000
+  targetPort: 3000
+  nodePort: 30002
+
+env:
+  DBHOST: postgresql
+  DBUSER: postgres
+  DBPASS: password
+  SERVICE_HOST_NAME: articlesrailsapi
+

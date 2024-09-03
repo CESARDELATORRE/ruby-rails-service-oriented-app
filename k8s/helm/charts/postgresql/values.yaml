@@ -1,0 +1,31 @@
+# namespace: ruby-rails-apis-poc
+app: postgresql-app
+
+deployment:
+  name: postgresql-deployment
+  replicas: 1
+
+container:
+  name: postgresql-container
+  image: postgres
+  port: 5432
+  env:
+    POSTGRES_DB: articles_rails_api_development
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: password
+  volumeMount:
+    mountPath: /var/lib/postgresql/data/
+    name: postgresdb
+
+service:
+  name: postgresql
+  type: ClusterIP
+  port: 5432
+  targetPort: 5432
+
+pvc:
+  name: postgresdb-pvc
+  accessModes:
+    - ReadWriteOnce
+  storage: 1Gi
+

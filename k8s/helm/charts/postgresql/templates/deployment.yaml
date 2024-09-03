@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+  # namespace: {{ .Values.namespace }}
+  #(CDLTLL) Another option based on the namespaces provided in the release:
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.app }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app }}
+    spec:
+      containers:
+      - name: {{ .Values.container.name }}
+        image: "{{ .Values.container.image }}"
+        readinessProbe:
+            exec:
+              command:
+                - pg_isready
+            initialDelaySeconds: 5
+            periodSeconds: 10
+        env:
+        - name: POSTGRES_DB
+          value: {{ .Values.container.env.POSTGRES_DB }}
+        - name: POSTGRES_USER
+          value: {{ .Values.container.env.POSTGRES_USER }}
+        - name: POSTGRES_PASSWORD
+          value: {{ .Values.container.env.POSTGRES_PASSWORD }}
+        ports:
+        - containerPort: {{ .Values.container.port }}
+        volumeMounts:
+        - mountPath: {{ .Values.container.volumeMount.mountPath }}
+          name: {{ .Values.container.volumeMount.name }}
+      volumes:
+      - name: {{ .Values.container.volumeMount.name }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.pvc.name }}

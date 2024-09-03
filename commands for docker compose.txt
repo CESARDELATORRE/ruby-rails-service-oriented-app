@@ -1,0 +1,16 @@
+
+
+docker-compose -f docker-compose.yml up --build
+
+docker-compose up
+
+docker-compose down
+
+ONLY FIRST TIME: DATA MIGRATIONS AND SEED
+-----------------------------------------
+
+1. ONLY Stop the services with ctrl+c  (DO NOT run docker compose DOWN)
+
+2. docker-compose run articlesrailsapi rails db:migrate
+
+3. docker-compose run articlesrailsapi rails db:seed

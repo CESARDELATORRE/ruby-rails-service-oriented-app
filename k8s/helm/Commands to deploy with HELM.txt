@@ -1,0 +1,135 @@
+
+
+DEPLOY WHOLE APP INTO K8s:
+--------------------------
+
+Initialization / First time only:
+cd path-to-k8s-helm
+chmod +x deploy-app-with-helm.sh uninstall-app-with-helm.sh
+
+FULL DEPLOY (Normal + Namespace-creation):
+./deploy-app-with-helm.sh --create-namespace
+
+FULL DEPLOY (Normal - NO Namespace-creation):
+./deploy-app-with-helm.sh
+
+
+
+UNINSTALL WHOLE APP FROM K8s (Including namespace):
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+./uninstall-app-with-helm.sh
+
+
+
+
+ONLY REMOVE K8s NAMESPACE:
+!!!!!!!!!!!!!!!!!!!!!
+kubectl delete namespace ruby-rails-apis-poc
+or
+kubectl delete -f ../kubectl/00-namespace.yaml
+
+
+
+Check services
+--------------
+kubectl get services --namespace ruby-rails-apis-poc
+
+Check deployments
+-----------------
+kubectl get deployments --namespace ruby-rails-apis-poc
+
+Check pods
+----------
+kubectl get pods --namespace ruby-rails-apis-poc
+
+
+Query API
+curl localhost:30002/api/authors
+
+Run WebApp in browser:
+http://localhost:30001/healthcheck
+
+http://localhost:30001/
+http://localhost:30001/authors/
+
+
+
+
+ISSUES with HELM CHART DEPLOYMENTS:
+
+helm list --all-namespaces
+
+helm uninstall ruby-rails-apis-poc --namespace ruby-rails-apis-poc
+
+helm uninstall frontendwebapp --namespace <namespace>
+
+
+kubectl get all --all-namespaces | grep frontendwebapp
+
+kubectl delete <resource-type> <resource-name> --namespace <namespace>
+
+
+
+=================================================================================================
+
+OTHER WAYS - MIGHT CAUSE "RACE CONDITIONS" WHEN DEPLOYING THE SERVICES 
+
+=================================================================================================
+
+
+
+DIRECT HELM CHART commands:
+
+FULL DEPLOY (Normal + Namespace-creation):
+helm install ruby-rails-apis-poc . --namespace ruby-rails-apis-poc --create-namespace
+
+FULL DEPLOY (Normal - NO Namespace-creation):
+helm install ruby-rails-apis-poc . --namespace ruby-rails-apis-poc
+
+FULL DEPLOY (DEBUGGING + Namespace-creation):
+helm install ruby-rails-apis-poc . --namespace ruby-rails-apis-poc --create-namespace --debug
+
+FULL DEPLOY (DEBUGGING + timeout - NO Namespace-creation):
+helm install ruby-rails-apis-poc . --namespace ruby-rails-apis-poc --debug --timeout 10m0s
+
+FULL DEPLOY (DEBUGGING + DRY-RUN - NO Namespace-creation):
+helm install ruby-rails-apis-poc . --namespace ruby-rails-apis-poc --debug --dry-run
+
+
+
+
+DELETE / UNINSTALL ALL (Except namespace
+!!!!!!
+helm uninstall ruby-rails-apis-poc --namespace ruby-rails-apis-poc
+
+
+ONLY REMOVE K8s NAMESPACE:
+!!!!!!!!!!!!!!!!!!!!!
+kubectl delete namespace ruby-rails-apis-poc
+or
+kubectl delete -f ../kubectl/00-namespace.yaml
+
+
+
+DEPLOY ONY BY ONE THE charts
+----------------------------
+
+helm install postgresql ./charts/postgresql/.  --namespace ruby-rails-apis-poc
+	
+helm install db-migrate-and-seed ./charts/db-migrate-and-seed/.  --namespace ruby-rails-apis-poc
+	
+helm install articlesrailsapi ./charts/articlesrailsapi/.  --namespace ruby-rails-apis-poc
+	
+helm install frontendwebapp ./charts/frontendwebapp/.  --namespace ruby-rails-apis-poc
+
+
+UNINSTALL one by one:
+!!!!!!!!!!!!!!!!!!!!!
+
+helm uninstall frontendwebapp --namespace ruby-rails-apis-poc
+
+helm uninstall articlesrailsapi --namespace ruby-rails-apis-poc
+
+helm uninstall db-migrate-and-seed --namespace ruby-rails-apis-poc
+
+helm uninstall postgresql --namespace ruby-rails-apis-poc

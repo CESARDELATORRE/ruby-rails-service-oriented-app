@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql-deployment
+  namespace: ruby-rails-apis-poc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql-app
+  template:
+    metadata:
+      labels:
+        app: postgresql-app
+    spec:
+      containers:
+      - name: postgresql-container
+        image: postgres
+        env:
+        - name: POSTGRES_DB
+          value: articles_rails_api_development
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: password
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data/
+          name: postgresdb
+      volumes:
+      - name: postgresdb
+        persistentVolumeClaim:
+          claimName: postgresdb-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql
+  namespace: ruby-rails-apis-poc
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: postgresql-app
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgresdb-pvc
+  namespace: ruby-rails-apis-poc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

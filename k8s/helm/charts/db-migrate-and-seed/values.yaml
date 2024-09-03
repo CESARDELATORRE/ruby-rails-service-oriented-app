@@ -1,0 +1,20 @@
+# namespace: ruby-rails-apis-poc
+app: articlesrailsapi-app
+
+dbMigrateJob:
+  name: db-migrate
+  image: rubyonrailspocs/articlesrailsapi
+  command: ["bin/rails", "db:migrate"]
+  env:
+    DBHOST: postgresql
+    DBUSER: postgres
+    DBPASS: password
+
+dbSeedJob:
+  name: db-seed
+  image: rubyonrailspocs/articlesrailsapi
+  command: ["bin/rails", "db:seed"]
+  env:
+    DBHOST: postgresql
+    DBUSER: postgres
+    DBPASS: password

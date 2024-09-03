@@ -1,0 +1,19 @@
+# namespace: ruby-rails-apis-poc
+app: frontendwebapp-app
+
+deployment:
+  name: frontendwebapp-deployment
+  replicas: 1
+
+container:
+  name: frontendwebapp-container
+  image: rubyonrailspocs/frontendwebapp:latest
+  imagePullPolicy: Always
+  port: 3000
+
+service:
+  name: frontendwebapp
+  type: NodePort
+  port: 3000
+  targetPort: 3000
+  nodePort: 30001

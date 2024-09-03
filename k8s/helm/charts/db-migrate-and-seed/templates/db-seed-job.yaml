@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.dbSeedJob.name }}
+  # namespace: {{ .Values.namespace }}
+  #(CDLTLL) Another option based on the namespaces provided in the release:
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.app }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: {{ .Values.dbSeedJob.name }}
+        image: {{ .Values.dbSeedJob.image }}
+        command: {{ .Values.dbSeedJob.command | toJson }}
+        env:
+        - name: DBHOST
+          value: {{ .Values.dbSeedJob.env.DBHOST }}
+        - name: DBUSER
+          value: {{ .Values.dbSeedJob.env.DBUSER }}
+        - name: DBPASS
+          value: {{ .Values.dbSeedJob.env.DBPASS }}
+      restartPolicy: OnFailure

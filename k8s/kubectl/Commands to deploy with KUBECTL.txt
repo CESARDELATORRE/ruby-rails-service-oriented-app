@@ -1,0 +1,65 @@
+
+BUILD IMAGE
+docker compose build
+
+PUSH IMAGE to DOCKER HUB:
+docker push rubyonrailspocs/frontendwebapp
+docker push rubyonrailspocs/articlesrailsapi
+
+Set DEFAULT NAMESPACE:
+kubectl config set-context --current --namespace=ruby-rails-apis-poc
+kubectl config set-context --current --namespace=default
+
+
+DEPLOY:
++++++++++++++++++++++++++++++++++++++++++++
+All pods in folder:
+kubectl apply -f .
+
+One by one:
+kubectl apply -f 00-namespace.yaml
+kubectl apply -f 01-postgresql.yaml
+kubectl apply -f 02-articlesrailsapi.yaml
+kubectl apply -f 03-frontendwebapp.yaml
+kubectl apply -f 04-db-migrate-and-seed.yaml
+
+Check services
+--------------
+kubectl get services --namespace ruby-rails-apis-poc
+
+Check deployments
+-----------------
+kubectl get deployments --namespace ruby-rails-apis-poc
+
+Check pods
+----------
+kubectl get pods --namespace ruby-rails-apis-poc
+
+
+Query API
+curl localhost:30002/api/authors
+
+Run WebApp in browser:
+http://localhost:30001/healthcheck
+
+http://localhost:30001/
+http://localhost:30001/authors/
+
+
+
+REMOVE:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+All pods in folder:
+kubectl delete -f .
+
+REMOVE K8s NAMESPACE:
+kubectl delete namespace ruby-rails-apis-poc
+or
+kubectl delete -f ../kubectl/00-namespace.yaml
+
+
+REMOVE ONE BY ONE:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+kubectl delete -f 01-frontendwebapp.yaml
+kubectl delete -f 02-articlesrailsapi.yaml
+kubectl delete -f 03-postgresql.yaml

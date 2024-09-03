@@ -1,0 +1,15 @@
+dependencies:
+- name: frontendwebapp
+  repository: file://./charts/frontendwebapp
+  version: 0.1.0
+- name: articlesrailsapi
+  repository: file://./charts/articlesrailsapi
+  version: 0.1.0
+- name: postgresql
+  repository: file://./charts/postgresql
+  version: 0.1.0
+- name: db-migrate-and-seed
+  repository: file://./charts/db-migrate-and-seed
+  version: 0.1.0
+digest: sha256:924521f05004427ac5b263d42af007a983b020175e05cf79fdd2655d0e845bb5
+generated: "2024-08-28T20:03:03.387287205-04:00"

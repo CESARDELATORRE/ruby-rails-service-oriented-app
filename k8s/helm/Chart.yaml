@@ -1,0 +1,19 @@
+apiVersion: v2
+name: ruby-rails-apis-poc
+description: A Helm chart for deploying my entire application
+version: 0.1.0
+appVersion: "1.0"
+
+dependencies:
+  - name: postgresql
+    version: "0.1.0"
+    repository: "file://./charts/postgresql"
+  - name: articlesrailsapi
+    version: "0.1.0"
+    repository: "file://./charts/articlesrailsapi"
+  - name: frontendwebapp
+    version: "0.1.0"
+    repository: "file://./charts/frontendwebapp"
+  - name: db-migrate-and-seed
+    version: "0.1.0"
+    repository: "file://./charts/db-migrate-and-seed"

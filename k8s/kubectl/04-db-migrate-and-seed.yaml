@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migrate
+  namespace: ruby-rails-apis-poc
+spec:
+  template:
+    spec:
+      containers:
+      - name: db-migrate
+        image: rubyonrailspocs/articlesrailsapi
+        command: ["bin/rails", "db:migrate"]
+        env:
+        - name: DBHOST
+          value: postgresql
+        - name: DBUSER
+          value: postgres
+        - name: DBPASS
+          value: password
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-seed
+  namespace: ruby-rails-apis-poc
+spec:
+  template:
+    spec:
+      containers:
+      - name: db-seed
+        image: rubyonrailspocs/articlesrailsapi
+        command: ["bin/rails", "db:seed"]
+        env:
+        - name: DBHOST
+          value: postgresql
+        - name: DBUSER
+          value: postgres
+        - name: DBPASS
+          value: password
+      restartPolicy: OnFailure

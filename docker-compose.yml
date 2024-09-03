@@ -1,0 +1,36 @@
+services:
+    frontendwebapp:
+        build: ./frontend-web-app/.
+        image: rubyonrailspocs/frontendwebapp
+        command: bundle exec rails s -b '0.0.0.0'
+        ports:
+        - "3000:3000"
+
+    articlesrailsapi:
+        build: ./articles-rails-api/.
+        image: rubyonrailspocs/articlesrailsapi
+        restart: "no"
+        environment:
+            - DBHOST=postgresql
+            - DBUSER=postgres
+            - DBPASS=password
+            - SERVICE_HOST_NAME=articlesrailsapi
+        ports:
+            - 4000:3000
+        depends_on:
+            - postgresql
+
+    postgresql:
+        image: postgres
+        restart: "no"
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_DB: articles_rails_api_development
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: password
+        volumes:
+            - postgresdb:/var/lib/postgresql/data/
+
+volumes:
+    postgresdb:
