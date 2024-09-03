@@ -61,21 +61,243 @@ git clone https://github.com/CESARDELATORRE/ruby-rails-service-oriented-app.git
 
 
 # Deployment to Docker host
-Check the commands at the file:
+
+
+## Only the first time you deploy it
+
+This section you need to do it just once, the first time you deploy it, because you need to generate example data in te database.
+
+**1. Build the Docker images:**
+
+```bash
+docker-compose -f docker-compose.yml up --build
+```
+
+**2. Start the app and exit with Ctrl+C:** Basically, you need to have the database container deployed first in order to later run the data migrations and seed.
+
+```bash
+docker-compose up
+(Wait until the app is deployed)
+
+Exit with Ctrl+C (Do NOT run docker compose down)
+```
+
+**3. Data migrations and data seed**
+
+
+1. Make sure you only left the services with ctrl+c  (DO NOT run docker compose DOWN)
+
+2. Run the following for data migrations:
+
+```bash
+docker-compose run articlesrailsapi rails db:migrate
+```
+
+3. Run the following for data seed:
+
+```bash
+docker-compose run articlesrailsapi rails db:seed
+```
+
+## Normal deploy and run (after data migrations/seed are done)
+
+Anytime moving forward after migration/seed you can directly run:
+
+```bash
+docker-compose up
+```
+
+## Test the app running
+
+The external ports where the services are running when deployed into Docker host are:
+
+- WEB-APP: Port 3000
+- WEB-API: Port 4000 
+
+### Test the query WEB API (In Docker host)
+
+From a terminal window:
+
+```bash
+curl localhost:4000/api/authors
+```
+
+You should see a JSON data with a list of the Authors, like the following:
+
+![Test WEB API with curl](./docs/images/test-curl-web-api-test-from-terminal-docker.jpg)
+
+
+### Test WebApp HealthCheck (In Docker host)
+
+
+Simple HealthCheck of Web-App:
+
+http://localhost:3000/healthcheck
+
+![Test Healthcheck](./docs/images/test-healthcheck-in-docker.jpg)
+
+
+### Test the WEB APP (In Docker host)
+
+Web-App returning the Authors list:
+
+http://localhost:3000/
+
+or
+
+http://localhost:3000/authors/
+
+![Test Authors WebApp](./docs/images/test-authors-web-app-in-docker.jpg)
+
+
+
+### Stop the app in Docker
+
+```bash
+docker-compose down
+```
+
+
+
+## Additional commands for Docker
+
+Additional commands are in this utils file:
 
 [**commands for docker compose.txt**](/commands%20for%20docker%20compose.txt)
+
+
 
 # Deployment to Kubernetes
 
 There are two options for Kubernetes deployment in this app:
-- A. Deployment using KUBECTL and .YAML deployment files.
+
+- OPTION A. Deployment using KUBECTL and .YAML deployment files.
+
+- OPTION B. Deployment using HELM and CHART deployment files.
+
+## (Prerequisite) Kubernetes cluster installation
+
+Make sure you have enabled Kubernetes in Docker for Desktop or install Kubernetes into any Linux box/VM. 
+
+## OPTION A. Deploy to Kubernetes using KUBECTL
+
+### Only the first time you deploy it
+
+**1. (OPTIONAL) Build the Docker images:**
+
+You ony have to re-build the images if you want to use your own images in case you might have changed the Ruby code, etc.
+
+```bash
+docker-compose -f docker-compose.yml up --build
+```
+
+**2. (OPTIONAL) Push images to Docker Hub (Docker Images Registry):** 
+
+Kubernetes can only deploy Docker images if they are shared in an accesible Docker Registry. You cannot directly deploy the images from your development machine.
+
+You can use any Docker Images Registry, like Docker Hub.
+
+You ony have to push the images into a Docker Images Registry if you want to use your own images in case you might have changed the Ruby code, etc. In that case, you'd need your own account (i.e. a Docker Hub account) in order to be able to push images into the registry.
+
+Example:
+
+```bash
+docker push rubyonrailspocs/frontendwebapp
+docker push rubyonrailspocs/articlesrailsapi
+```
+
+
+### Deploy app into Kubernetes (Including Data migrations/seed): 
+
+Run this on the terminal where you have KUBECTL configured against the cluster:
+
+```bash
+cd <YOUR-PATH>/k8s/kubectl
+
+kubectl apply -f .
+```
+
+
+
+### Check the app's deployment in K8s
+
+Before testing the app, let's see how it was deployed in K8s:
+
+**Check deployments**
+
+```bash
+kubectl get deployments --namespace ruby-rails-apis-poc
+```
+
+**Check pods:**
+
+```bash
+kubectl get pods --namespace ruby-rails-apis-poc
+```
+
+**Check services:**
+
+```bash
+kubectl get services --namespace ruby-rails-apis-poc
+```
+
+### Test the app running
+
+The external ports where the services are running when deployed into the KUBERNETES cluster are:
+
+- WEB-APP: Port 30001
+- WEB-API: Port 30002 
+
+#### Test the query WEB-API (In Kubernetes)
+
+From a terminal window:
+
+```bash
+curl localhost:30002/api/authors
+```
+
+
+#### Test WebApp HealthCheck (In Kubernetes)
+
+
+Simple HealthCheck of Web-App:
+
+http://localhost:3000/healthcheck
+
+
+
+
+#### Test WEB APP  (In Kubernetes)
+
+Web-App returning the Authors list:
+
+http://localhost:3000/
+
+or
+
+http://localhost:3000/authors/
+
+
+
+#### Remove/Uninstall the app from Kubernetes cluster
+
+```bash
+kubectl delete -f .
+```
+
+
+### Additional commands for Kubernetes and KUBECTL
+
+Additional commands are in this utils file:
 
     [**/k8s/helm/Commands to deploy with KUBECTL.txt**](/k8s/kubectl/Commands%20to%20deploy%20with%20KUBECTL.txt)
 
 
-- B. Deployment using HELM and CHART deployment files.
-
-    [**/k8s/helm/Commands to deploy with HELM.txt**](/k8s/helm/Commands%20to%20deploy%20with%20HELM.txt)
 
 
 
+# OPTION B. Deploy to Kubernetes using HEML
+
+Deploy using HELM and CHART deployment files by using the commands in the following file.
+
+[**/k8s/helm/Commands to deploy with HELM.txt**](/k8s/helm/Commands%20to%20deploy%20with%20HELM.txt)
