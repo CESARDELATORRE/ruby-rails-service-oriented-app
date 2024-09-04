@@ -219,6 +219,8 @@ You need to get the token for the service account to login into the dashboard:
 kubectl -n kubernetes-dashboard create token dashboard-admin-sa
 ```
 
+![K8s dashboard bearer token](./docs/images/k8s-dashboard-temporal-admin-token.jpg)
+
 5. Access the Kubernetes Dashboard:
 
 You need to start the kubectl proxy in order to reach the dashboard within the cluster:
@@ -232,11 +234,16 @@ kubectl proxy
 
 http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
 
-Provide the token for login, etc.
+![K8s dashboard login page](./docs/images/k8s-dashboard-login-page.jpg)
+
+In that login page you need to provide the temporal token you generated to login.
+That token will expire by default in 15 minutes, so you might need to generate more tokens.
+
+Optionally, there are ways to increase the token expiration time.
 
 
 
-## OPTION A. Deploy to Kubernetes using KUBECTL
+## OPTION A. Deploy to Kubernetes using KUBECTL and deployment .YAML files
 
 ### Only the first time you deploy it
 
@@ -244,8 +251,12 @@ Provide the token for login, etc.
 
 You ony have to re-build the images if you want to use your own images in case you might have changed the Ruby code, etc.
 
+You could build the Docker images with **"docker build"** commands, but it's easier to do it with a single command with **"docker compose build"**.
+
 ```bash
-docker-compose -f docker-compose.yml up --build
+cd <local-git-repo-root-folder>
+
+docker-compose build
 ```
 
 **2. (OPTIONAL) Push images to Docker Hub (Docker Images Registry):** 
@@ -262,7 +273,7 @@ Example:
 docker push rubyonrailspocs/frontendwebapp
 docker push rubyonrailspocs/articlesrailsapi
 ```
-
+But as mentioned, since the POC Docker images are already uploaded into Docker Hub for this example, unless you customize the app's code, you don't need to upload the Docker images, initially.
 
 ### Deploy app into Kubernetes (Including Data migrations/seed): 
 
@@ -274,6 +285,13 @@ cd <YOUR-PATH>/k8s/kubectl
 kubectl apply -f .
 ```
 
+This deployment command means:
+
+*"Deploy all the deployment .YAML files in the current folder"*, which are the following and you need to code in advanced:
+
+[KUBECTL deployment .YAML files](./k8s/kubectl)
+
+![K8s dashboard login page](./docs/images/kubectl-deployment-files-screenshot.jpg)
 
 
 ### Check the app's deployment in K8s
@@ -286,17 +304,48 @@ Before testing the app, let's see how it was deployed in K8s:
 kubectl get deployments --namespace ruby-rails-apis-poc
 ```
 
+![Kubectl get Deployments command](./docs/images/kubectl-get-deployments-command.jpg)
+
+There should be three deployments, all of then up and running as *"READY"*.
+
 **Check pods:**
 
 ```bash
 kubectl get pods --namespace ruby-rails-apis-poc
 ```
 
+![Kubectl get Pods command](./docs/images/kubectl-get-pods-command.jpg)
+
+You can see that there are two additional pods that are in *"Completed status"*. Those are the jobs that run for data migrations and seed. Once they completed, they are finished.
+
+About the "real" application pods, if you increase the number of instances of each pod (currently there's one instance per image/service type), you would see it here, too, like if you increase to 10 pod instances one of the pods.
+
 **Check services:**
 
 ```bash
 kubectl get services --namespace ruby-rails-apis-poc
 ```
+
+You can see here what ports are used for each service to access externally to the cluster, like when using the browser later:
+
+
+![Kubectl get Services command](./docs/images/kubectl-get-services-command.jpg)
+
+
+
+You can also check the app's deployment in the Kubernetes Dashboard:
+
+- Login in the K8s dashboard with the generated temporal bearer token.
+
+- Select the app's namespace instead of "default" namespace.
+
+![K8s namespace selection](./docs/images/k8s-dashboard-namespace-selection.jpg)
+
+
+- Check the Deployments, Pods and Services menu options to see comparable info to the one you saw in Kubectl CLI, but now in a graphical UI. 
+
+![K8s dashboard workload and menu options](./docs/images/k8s-dashboard-workload-and-menus.jpg)
+
 
 ### Test the app running
 
