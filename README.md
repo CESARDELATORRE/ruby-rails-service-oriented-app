@@ -396,7 +396,7 @@ kubectl delete -f .
 
 Additional commands are in this utils file:
 
-    [**/k8s/helm/Commands to deploy with KUBECTL.txt**](/k8s/kubectl/Commands%20to%20deploy%20with%20KUBECTL.txt)
+    **[/k8s/helm/Commands to deploy with KUBECTL.txt](/k8s/kubectl/Commands%20to%20deploy%20with%20KUBECTL.txt)**
 
 
 
