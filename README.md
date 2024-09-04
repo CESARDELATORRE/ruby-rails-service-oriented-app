@@ -407,3 +407,8 @@ Additional commands are in this utils file:
 Deploy using HELM and CHART deployment files by using the commands in the following file.
 
 [**/k8s/helm/Commands to deploy with HELM.txt**](/k8s/helm/Commands%20to%20deploy%20with%20HELM.txt)
+
+Explanations and possibilities for HELM are a lot more extense than for KUBECTL deployments.
+Detailed explanations can be added here in the future. For now, the most useful commands to deploy and uninstall this application using HELM are written in that .TXT file.
+
+
