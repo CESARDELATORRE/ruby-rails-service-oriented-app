@@ -1,6 +1,11 @@
 # Ruby on Rails service oriented example application with deployment to Docker and Kubernetes
 
-A simple example of Ruby on Rails app with several services, deployed into Docker host or Kubernetes
+A POC of Ruby on Rails app with several services, deployed into Docker host and Kubernetes.
+
+Deployment to Kubernetes is developed (YAML code) with two optional methods:
+
+- KUBECTL deployment files
+- HELM chart files
 
 # Application architecture
 
