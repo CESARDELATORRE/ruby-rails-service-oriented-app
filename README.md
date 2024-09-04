@@ -2,10 +2,10 @@
 
 A POC of Ruby on Rails app with several services, deployed into Docker host and Kubernetes.
 
-Deployment to Kubernetes is developed (YAML code) with two optional methods:
+Deployment to Kubernetes is developed (YAML code) with two alternative methods:
 
-- [KUBECTL deployment files](./k8s/kubectl)
-- [HELM chart files](./k8s/helm)
+- [KUBECTL deployment files](./k8s/kubectl) - Recommended when getting started with Kubernetes.
+- [HELM chart files](./k8s/helm) - Recommended when moving towards DevOps CI/CD and multiple automated deployment environments (Dev/QA/Prod).
 
 # Application architecture
 
